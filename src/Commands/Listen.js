@@ -53,11 +53,17 @@ class Listen extends Command {
     const express = require("express");
     const app = express();
 
-    const basicAuthConfig = { challenge: true, users: {} };
-    basicAuthConfig.users[bullConfig.arenaUser || "admin"] =
-      bullConfig.arenaPassword || "";
+    app.get("/hello", function(req, res) {
+      res.send("hello");
+    });
 
-    app.use(basicAuth(basicAuthConfig));
+    if (bullConfig.arenaUser && bullConfig.arenaPassword) {
+      const basicAuthConfig = { challenge: true, users: {} };
+      basicAuthConfig.users[bullConfig.arenaUser || "admin"] =
+        bullConfig.arenaPassword || "";
+
+      app.use(basicAuth(basicAuthConfig));
+    }
 
     // Make arena's resources (js/css deps) available at the base app route
     app.use("/", arenaConfig);
