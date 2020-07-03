@@ -22,14 +22,11 @@ class BaseQueue {
         if (instance.defaultHandle)
           return await instance.defaultHandle(payload);
       } catch (e) {
-        try {
-          if (instance.onError) return await instance.onError(e, payload);
-        } catch (err) {
-          Logger.error("Unhandled error on handling bool error");
-          Logger.error("%o", err);
+        if (instance.onError) instance.onError(e, payload);
+        else {
+          Logger.error("Unhandled error on bool event");
+          throw e
         }
-        Logger.error("Unhandled error on bool event");
-        Logger.error("%o", e);
       }
     });
 
